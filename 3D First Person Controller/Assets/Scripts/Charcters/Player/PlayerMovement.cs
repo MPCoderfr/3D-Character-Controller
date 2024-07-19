@@ -8,22 +8,26 @@ public class PlayerMovement : MonoBehaviour
     [Header("Orientation")]
     public Transform orientation;
 
-    #region Public Fields:
+    #region PUBLIC FIELDS:
     [Header("Movement")]
     public float moveSpeed;
+    public float gravity = -9.8f;
 
     [Header("Jump")]
     public float JumpHeight;
+    public LayerMask grounMasks;
     #endregion
 
+    #region PRIVATE FIELDS:
     float horizInput;
     float vertInput;
-
     Vector3 moveDirect;
+    #endregion
 
-    Rigidbody rb;
-
-    CharacterController characterController;
+    #region INITIALIZATIONS:
+    private Rigidbody rb;
+    //private CharacterController characterController;
+    #endregion
 
     private void Start()
     {
@@ -35,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         KeyInputs(); 
+        JumpPlayer();
     }
 
     private void FixedUpdate()
@@ -50,10 +55,15 @@ public class PlayerMovement : MonoBehaviour
     public void MovePlayer()
     {
         moveDirect = orientation.forward * vertInput + orientation.right * horizInput;
-        rb.AddForce(moveDirect.normalized * moveSpeed * 4f, ForceMode.Force);
         //characterController.Move(moveDirect * moveSpeed * Time.deltaTime);
-
+        rb.AddForce(moveDirect.normalized * moveSpeed * Time.deltaTime * 10f, ForceMode.Force);
     }
 
-
+    public void JumpPlayer()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
+        }
+    }
 }
