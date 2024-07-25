@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Jump")]
     public float JumpHeight;
     public LayerMask grounMasks;
+
     #endregion
 
     #region PRIVATE FIELDS:
