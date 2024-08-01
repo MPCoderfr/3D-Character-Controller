@@ -54,6 +54,7 @@ public class FirstPersonControls : MonoBehaviour
         move = transform.TransformDirection(move);
         // Move the character controller based on the movement vector and speed
         characterController.Move(move * moveSpeed * Time.deltaTime);
+
     }
     public void LookAround()
     {
@@ -68,6 +69,8 @@ public class FirstPersonControls : MonoBehaviour
         90f);
         // Apply the clamped vertical rotation to the player camera
         playerCamera.localEulerAngles = new Vector3(verticalLookRotation, 0, 0);
+
+       
     }
     public void ApplyGravity()
     {
