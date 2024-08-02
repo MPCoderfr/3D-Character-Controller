@@ -6,23 +6,19 @@ using UnityEngine.Windows;
 
 public class FirstPersonControls : MonoBehaviour
 {
-    #region PUBLIC FIELDS:
+    // Public variables to set movement and look speed, and the playercamera
     public float moveSpeed; // Speed at which the player moves
     public float lookSpeed; // Sensitivity of the camera movement
     public float gravity = -9.81f; // Gravity value
-    //public float jumpHeight = 1.0f; // Height of the jump
-    public Transform playerCamera; // Reference to the player's camera                             
-    #endregion
+    public float jumpHeight = 1.0f; // Height of the jump
+    public Transform playerCamera; // Reference to the player's camera
 
-    #region PRIVATE FIELDS:
     // Private variables to store input values and the character controller
     private Vector2 moveInput; // Stores the movement input from the player
     private Vector2 lookInput; // Stores the look input from the player
     private float verticalLookRotation = 0f; // Keeps track of vertical camera rotation for clamping
     private Vector3 velocity; // Velocity of the player
     private CharacterController characterController; // Reference to the CharacterController component
-    #endregion
-
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -40,10 +36,8 @@ public class FirstPersonControls : MonoBehaviour
         // Subscribe to the look input events
         playerInput.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>(); // Update lookInput when look input is performed
         playerInput.Player.Look.canceled += ctx => lookInput = Vector2.zero; // Reset lookInput when look input is canceled
-
-/*                      // Subscribe to the jump input event
+        // Subscribe to the jump input event
         playerInput.Player.Jump.performed += ctx => Jump(); // Call the Jump method when jump input is performed
-*/
     }
     private void Update()
     {
@@ -60,6 +54,7 @@ public class FirstPersonControls : MonoBehaviour
         move = transform.TransformDirection(move);
         // Move the character controller based on the movement vector and speed
         characterController.Move(move * moveSpeed * Time.deltaTime);
+
     }
     public void LookAround()
     {
@@ -73,8 +68,9 @@ public class FirstPersonControls : MonoBehaviour
         verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f,
         90f);
         // Apply the clamped vertical rotation to the player camera
-        playerCamera.localEulerAngles = new Vector3(verticalLookRotation,
-        0, 0);
+        playerCamera.localEulerAngles = new Vector3(verticalLookRotation, 0, 0);
+
+       
     }
     public void ApplyGravity()
     {
@@ -83,14 +79,14 @@ public class FirstPersonControls : MonoBehaviour
             velocity.y = -0.5f; // Small value to keep the player grounded
         }
         velocity.y += gravity * Time.deltaTime; // Apply gravity to the velocity
-    characterController.Move(velocity * Time.deltaTime); // Apply the velocity to the character
+        characterController.Move(velocity * Time.deltaTime); // Apply the velocity to the character
     }
-    /*public void Jump()
+    public void Jump()
     {
         if (characterController.isGrounded)
         {
             // Calculate the jump velocity
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-    }*/
+    }
 }
