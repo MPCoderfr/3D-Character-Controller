@@ -26,13 +26,22 @@ public class FirstPersonControls : MonoBehaviour
     public GameObject projectilePrefab; // Projectile prefab for shooting
     public Transform firePoint; // Point from which the projectile is fired
     public float projectileSpeed = 20f; // Speed at which the projectile is fired
-    public float pickUpRange = 3f; // Range within which objects can be picked up
-    private bool holdingGun = true;
+
 
     [Header("PICKING UP SETTINGS")]
     [Space(5)]
     public Transform holdPosition; // Position where the picked-up object will be held
     private GameObject heldObject; // Reference to the currently held object
+    public float pickUpRange = 3f; // Range within which objects can be picked up
+    private bool holdingGun = false;
+
+    [Header("CROUCH SETTINGS")]
+    [Space(5)]
+    public float crouchHeight = 1f; //make shorter
+    public float standingHeight = 2f; //make normal height
+    public float crouchSpeed = 1.5f; //rate of movement while crouching
+    private bool isCrouching = false; //default position should be standing
+
     private void Awake()
     {
         // Get and store the CharacterController component attached to this GameObject
@@ -61,6 +70,7 @@ public class FirstPersonControls : MonoBehaviour
 
         // Subscribe to the pick-up input event
         playerInput.Player.PickUp.performed += ctx => PickUpObject(); // Call the PickUpObject method when pick-up input is performed
+        playerInput.Player.Crouch.performed += ctx => ToggleCrouch(); // Call the ToggleCrouch method when crouch input is performed
     }
     private void Update()
     {
@@ -75,8 +85,36 @@ public class FirstPersonControls : MonoBehaviour
         Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
         // Transform direction from local to world space
         move = transform.TransformDirection(move);
+
+        //Adjust Speed if Crouching
+        float currentSpeed;
+        if (isCrouching)
+        {
+            currentSpeed = crouchSpeed;
+        }
+        else
+        {
+            currentSpeed = moveSpeed;
+        }
+
         // Move the character controller based on the movement vector and speed
-    characterController.Move(move * moveSpeed * Time.deltaTime);
+        characterController.Move(move * currentSpeed * Time.deltaTime);
+    }
+
+    public void ToggleCrouch()
+    {
+        if (isCrouching)
+        {
+            //Stand Up
+            characterController.height = standingHeight;
+            isCrouching = false;
+        }
+        else
+        {
+            //Crouch Down
+            characterController.height = crouchHeight;
+            isCrouching = true;
+        }
     }
     public void LookAround()
     {
@@ -132,6 +170,7 @@ public class FirstPersonControls : MonoBehaviour
             heldObject.transform.parent = null;
             holdingGun = false;
         }
+
         // Perform a raycast from the camera's position forward
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
         RaycastHit hit;
