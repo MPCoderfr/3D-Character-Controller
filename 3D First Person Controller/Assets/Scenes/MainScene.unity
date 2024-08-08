@@ -1487,11 +1487,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de1a5298bd22cc4418e1658d511da269, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  moveSpeed: 7
   lookSpeed: 1
   gravity: -9.81
-  jumpHeight: 2
+  jumpHeight: 3
   playerCamera: {fileID: 2012518746}
+  projectilePrefab: {fileID: 8715151171463713136, guid: a327fa96c8fa91d409a132a46d04234e,
+    type: 3}
+  firePoint: {fileID: 1780444590}
+  projectileSpeed: 20
+  pickUpRange: 3
+  holdPosition: {fileID: 0}
 --- !u!1 &2012518743
 GameObject:
   m_ObjectHideFlags: 0
