@@ -158,7 +158,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""right"",
                     ""id"": ""8682aae6-89a5-45ca-8232-13f27364b2a4"",
-                    ""path"": ""<Keyboard>/r"",
+                    ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
